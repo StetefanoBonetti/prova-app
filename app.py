@@ -5,6 +5,7 @@ import smtplib
 from email.mime.text import MIMEText
 from openai import OpenAI
 import os
+import uvicorn
 
 app = FastAPI()
 
@@ -46,3 +47,8 @@ async def process_file(file: UploadFile, email: str = Form(...)):
 
     except Exception as e:
         return JSONResponse({"status": "error", "message": str(e)})
+
+# Avvio server per Render
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # Render fornisce PORT
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
